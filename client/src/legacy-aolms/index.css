@@ -1,0 +1,658 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Base Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== DARK THEME (default) ===== */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #0a0e1a;
+  color: #e2e8f0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* ===== LIGHT THEME ===== */
+html.light body {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+/* ===== Scrollbar — Dark ===== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #243056;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ===== Scrollbar — Light ===== */
+html.light ::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ===== Glass Effect — Dark ===== */
+.glass {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-radius: 16px;
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ===== Glass Effect — Light ===== */
+html.light .glass {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== Text overrides for light mode ===== */
+html.light .text-white {
+  color: #0f172a;
+}
+
+html.light .text-slate-200 {
+  color: #334155;
+}
+
+html.light .text-slate-300 {
+  color: #475569;
+}
+
+html.light .text-slate-400 {
+  color: #64748b;
+}
+
+html.light .text-slate-500 {
+  color: #94a3b8;
+}
+
+html.light .text-slate-600 {
+  color: #94a3b8;
+}
+
+html.light .placeholder-slate-500::placeholder {
+  color: #94a3b8;
+}
+
+/* ===== Background overrides for light mode ===== */
+html.light .bg-navy-800\/80 {
+  background: #ffffff !important;
+}
+
+html.light .bg-navy-700\/30 {
+  background: rgba(226, 232, 240, 0.5);
+}
+
+/* ===== Border overrides for light mode ===== */
+html.light .border-white\/5,
+html.light .border-white\/10 {
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+html.light .border-white\/\[0\.03\] {
+  border-color: rgba(148, 163, 184, 0.12);
+}
+
+/* ===== Table row hover — Light ===== */
+html.light .table-row-hover:hover {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+/* ===== Modal overlay — Light ===== */
+html.light .modal-overlay {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+/* ===== All form controls — Light ===== */
+html.light select,
+html.light input#search-staff-input,
+html.light input[type="text"],
+html.light input[type="search"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+html.light select option {
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+html.light input#search-staff-input:focus,
+html.light input[type="text"]:focus,
+html.light input[type="search"]:focus {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* ===== Gradient avatar bg — Light ===== */
+html.light .bg-gradient-to-br.from-electric\/20.to-purple\/20 {
+  background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+}
+
+/* ===== Upload drag zone — Light ===== */
+html.light .border-dashed.border-white\/10 {
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+html.light .border-dashed.border-white\/10:hover {
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+/* ===== Hover states — Light ===== */
+html.light .hover\:bg-white\/5:hover {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+html.light .hover\:bg-white\/10:hover {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+html.light .bg-white\/\[0\.02\] {
+  background: rgba(241, 245, 249, 0.6);
+}
+
+/* ===== Font monospace — Light ===== */
+html.light .font-mono {
+  color: #334155;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+  }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s ease-out forwards;
+}
+
+.animate-count-up {
+  animation: countUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Stagger children animations */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+
+/* ===== Table Styles ===== */
+.table-row-hover {
+  transition: all 0.2s ease;
+}
+
+.table-row-hover:hover {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+/* ===== Status Pulse ===== */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot-active {
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.status-dot-warning {
+  background: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+.status-dot-danger {
+  background: #f43f5e;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.5);
+}
+
+/* ===== Modal Overlay ===== */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+/* ===== Pie Chart — Light Mode ===== */
+html.light #expiry-pie-chart .text-white {
+  color: #0f172a;
+}
+
+html.light #expiry-pie-chart .text-slate-300 {
+  color: #334155;
+}
+
+html.light #expiry-pie-chart .bg-white\/\[0\.06\] {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+html.light #expiry-pie-chart .bg-white\/\[0\.04\] {
+  background: rgba(15, 23, 42, 0.03);
+}
+
+/* ==========================================================
+   react-date-range overrides — DARK THEME (default)
+   ========================================================== */
+
+/* Calendar wrapper backgrounds */
+.rdrCalendarWrapper,
+.rdrDateRangeWrapper {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  border-radius: 12px;
+}
+
+.rdrDateDisplayWrapper {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border-radius: 12px 12px 0 0;
+  padding: 10px 12px !important;
+}
+
+.rdrDateDisplay {
+  margin: 0 !important;
+}
+
+.rdrDateDisplayItem {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.rdrDateDisplayItem input {
+  color: #e2e8f0 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.rdrDateDisplayItemActive {
+  border-color: #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.12) !important;
+}
+
+/* Month/Year header */
+.rdrMonthAndYearWrapper {
+  padding: 8px 0 !important;
+}
+
+.rdrMonthAndYearPickers select {
+  background: rgba(30, 41, 59, 0.9) !important;
+  color: #e2e8f0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  padding: 4px 24px 4px 8px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.rdrMonthAndYearPickers select option {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+.rdrNextPrevButton {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-radius: 8px !important;
+  transition: background 0.2s ease !important;
+}
+
+.rdrNextPrevButton:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.rdrNextPrevButton i {
+  border-color: transparent transparent transparent #94a3b8 !important;
+}
+
+.rdrPprevButton i {
+  border-color: transparent #94a3b8 transparent transparent !important;
+}
+
+.rdrNextButton i {
+  border-color: transparent transparent transparent #94a3b8 !important;
+}
+
+/* Weekday headers */
+.rdrWeekDay {
+  color: #64748b !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Month container */
+.rdrMonth {
+  padding: 0 12px 12px !important;
+}
+
+.rdrMonthName {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+}
+
+/* Day cells */
+.rdrDay {
+  color: #e2e8f0 !important;
+}
+
+.rdrDayNumber span {
+  color: #cbd5e1 !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+}
+
+.rdrDayDisabled {
+  background: transparent !important;
+}
+
+.rdrDayDisabled .rdrDayNumber span {
+  color: #334155 !important;
+}
+
+.rdrDayPassive .rdrDayNumber span {
+  color: #334155 !important;
+}
+
+.rdrDayToday .rdrDayNumber span::after {
+  background: #3b82f6 !important;
+  bottom: 2px !important;
+}
+
+/* Selection range highlight */
+.rdrInRange,
+.rdrStartEdge,
+.rdrEndEdge {
+  background: #3b82f6 !important;
+}
+
+.rdrDayInPreview,
+.rdrDayStartPreview,
+.rdrDayEndPreview {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+.rdrInRange ~ .rdrDayNumber span,
+.rdrStartEdge ~ .rdrDayNumber span,
+.rdrEndEdge ~ .rdrDayNumber span {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.rdrDayHovered .rdrDayNumber span {
+  color: #ffffff !important;
+}
+
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span {
+  color: #ffffff !important;
+}
+
+/* Range selection in-between shading */
+.rdrDayInPreview {
+  background: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* Defined ranges panel (if visible) */
+.rdrDefinedRangesWrapper {
+  background: #0f172a !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+  width: 160px !important;
+}
+
+.rdrStaticRangeLabel {
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+  padding: 10px 14px !important;
+}
+
+.rdrStaticRange {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+  background: transparent !important;
+  transition: background 0.2s ease !important;
+}
+
+.rdrStaticRange:hover .rdrStaticRangeLabel {
+  background: rgba(59, 130, 246, 0.1) !important;
+  color: #60a5fa !important;
+}
+
+.rdrInputRange {
+  padding: 6px 14px !important;
+}
+
+.rdrInputRangeInput {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #e2e8f0 !important;
+  border-radius: 6px !important;
+}
+
+/* ==========================================================
+   react-date-range overrides — LIGHT THEME
+   ========================================================== */
+
+html.light .rdrCalendarWrapper,
+html.light .rdrDateRangeWrapper {
+  background: #ffffff !important;
+  color: #1e293b !important;
+}
+
+html.light .rdrDateDisplayWrapper {
+  background: #f8fafc !important;
+}
+
+html.light .rdrDateDisplayItem {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light .rdrDateDisplayItem input {
+  color: #1e293b !important;
+}
+
+html.light .rdrDateDisplayItemActive {
+  border-color: #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.06) !important;
+}
+
+html.light .rdrMonthAndYearPickers select {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light .rdrMonthAndYearPickers select option {
+  background: #ffffff !important;
+  color: #1e293b !important;
+}
+
+html.light .rdrNextPrevButton {
+  background: #f1f5f9 !important;
+}
+
+html.light .rdrNextPrevButton:hover {
+  background: #e2e8f0 !important;
+}
+
+html.light .rdrNextPrevButton i,
+html.light .rdrPprevButton i,
+html.light .rdrNextButton i {
+  border-color: transparent transparent transparent #64748b !important;
+}
+
+html.light .rdrPprevButton i {
+  border-color: transparent #64748b transparent transparent !important;
+}
+
+html.light .rdrWeekDay {
+  color: #94a3b8 !important;
+}
+
+html.light .rdrMonthName {
+  color: #64748b !important;
+}
+
+html.light .rdrDayNumber span {
+  color: #334155 !important;
+}
+
+html.light .rdrDayDisabled .rdrDayNumber span {
+  color: #cbd5e1 !important;
+}
+
+html.light .rdrDayPassive .rdrDayNumber span {
+  color: #cbd5e1 !important;
+}
+
+html.light .rdrDayToday .rdrDayNumber span::after {
+  background: #3b82f6 !important;
+}
+
+html.light .rdrInRange ~ .rdrDayNumber span,
+html.light .rdrStartEdge ~ .rdrDayNumber span,
+html.light .rdrEndEdge ~ .rdrDayNumber span {
+  color: #ffffff !important;
+}
+
+html.light .rdrDayInPreview {
+  background: rgba(59, 130, 246, 0.06) !important;
+}
+
+html.light .rdrDefinedRangesWrapper {
+  background: #f8fafc !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
+html.light .rdrStaticRangeLabel {
+  color: #475569 !important;
+}
+
+html.light .rdrStaticRange {
+  border-bottom: 1px solid #f1f5f9 !important;
+  background: transparent !important;
+}
+
+html.light .rdrStaticRange:hover .rdrStaticRangeLabel {
+  background: rgba(59, 130, 246, 0.06) !important;
+  color: #2563eb !important;
+}
+
+html.light .rdrInputRangeInput {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}

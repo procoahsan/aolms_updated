@@ -1,0 +1,13 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Vite Dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "E:\\Project\\AOLMS\\client"],
+      "port": 5173,
+      "url": "http://localhost:5173",
+      "autoPort": true
+    }
+  ]
+}

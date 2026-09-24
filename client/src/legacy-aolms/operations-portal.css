@@ -1,0 +1,52 @@
+/*
+ * Legacy operational components are rendered inside the new application
+ * shell. Keep their visual helpers local to that workspace: the original
+ * stylesheet reset body/html and changed every portal page.
+ */
+.legacy-operations-space {
+  background: #0a0e1a;
+  border-radius: 16px;
+  color: #e2e8f0;
+  padding: 24px;
+}
+
+.legacy-operations-space .glass,
+.legacy-operations-space .glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.legacy-operations-space .glass-card {
+  border-radius: 16px;
+}
+
+.legacy-operations-space .table-row-hover:hover {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.legacy-operations-space .modal-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.legacy-operations-space .status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legacy-operations-space .status-dot-active { background: #10b981; }
+.legacy-operations-space .status-dot-warning { background: #f59e0b; }
+.legacy-operations-space .status-dot-danger { background: #f43f5e; }
+
+@keyframes legacyFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.legacy-operations-space .animate-fade-in {
+  animation: legacyFadeIn 0.4s ease-out forwards;
+}
