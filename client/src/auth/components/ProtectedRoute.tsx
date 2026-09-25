@@ -1,82 +1,17 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../main';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-type UserRole = 'admin' | 'controller' | 'technician' | null;
-
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = React.useState(true);
-
-  const fetchUserRole = async (userId: string): Promise<UserRole> => {
-    if (!supabase) return null;
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching profile:', error);
-        return null;
-      }
-
-      return data?.role as UserRole;
-    } catch (err) {
-      console.error('Error fetching user role:', err);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      if (!supabase) {
-        navigate('/login');
-        return;
-      }
-
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-        setIsLoading(false);
-        navigate('/login');
-        return;
-      }
-
-      // Get user role from profiles table
-      const userRole = await fetchUserRole(user.id);
-      setIsLoading(false);
-
-      if (!userRole) {
-        // No role found - sign out and redirect to login
-        await supabase.auth.signOut();
-        navigate('/login');
-        return;
-      }
-
-      // Check if the user has the required role for the route
-      const currentPath = window.location.pathname;
-      if (currentPath.startsWith('/admin') && userRole !== 'admin') {
-        navigate('/login');
-      } else if (currentPath.startsWith('/controller') && userRole !== 'controller') {
-        navigate('/login');
-      } else if (currentPath.startsWith('/technician') && userRole !== 'technician') {
-        navigate('/login');
-      }
-    };
-
-    checkAuth();
-  }, [navigate]);
-
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
-
-  return <>{children}</>;
+export const ProtectedRoute: React.FC<{children:React.ReactNode}> = ({children}) => {
+ const location=useLocation();
+ const access=useQuery({queryKey:['route-access',location.pathname],staleTime:0,queryFn:async()=>{
+  const {data}=await supabase!.auth.getUser();if(!data.user)return null;
+  const {data:profile,error}=await supabase!.from('profiles').select('role,is_active').eq('id',data.user.id).single();
+  if(error||!profile?.is_active)return null;
+  return profile.role as string;
+ }});
+ if(access.isPending)return <div className="p-8">Checking access...</div>;
+ if(!access.data || access.error || location.pathname.split('/')[1]!==access.data)return <Navigate to="/login" replace/>;
+ return <>{children}</>;
 };

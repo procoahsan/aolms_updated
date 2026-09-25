@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '../lib/utils';
 import { X } from 'lucide-react';
 
@@ -27,6 +28,11 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   // Handle escape key
   useEffect(() => {
@@ -34,7 +40,7 @@ export const Modal: React.FC<ModalProps> = ({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && closeOnEscape) {
-        onClose();
+        onCloseRef.current();
       }
       // Trap focus
       if (e.key === 'Tab' && modalRef.current) {
@@ -58,7 +64,7 @@ export const Modal: React.FC<ModalProps> = ({
     previousActiveElement.current = document.activeElement as HTMLElement;
 
     // Focus first focusable element
-    setTimeout(() => {
+    const focusTimer = setTimeout(() => {
       const firstFocusable = modalRef.current?.querySelector<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
@@ -66,14 +72,16 @@ export const Modal: React.FC<ModalProps> = ({
     }, 0);
 
     // Prevent body scroll
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      clearTimeout(focusTimer);
+      document.body.style.overflow = previousOverflow;
       previousActiveElement.current?.focus();
     };
-  }, [isOpen, onClose, closeOnEscape]);
+  }, [isOpen, closeOnEscape]);
 
   if (!isOpen) return null;
 
@@ -85,8 +93,8 @@ export const Modal: React.FC<ModalProps> = ({
     full: 'max-w-4xl',
   };
 
-  return (
-    <div className="fixed inset-0 z-[50] overflow-y-auto animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] overflow-y-auto animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       {/* Background overlay */}
       <div
         className="fixed inset-0 bg-neutral-900/50 dark:bg-neutral-950/70 animate-fade-in"
@@ -95,11 +103,11 @@ export const Modal: React.FC<ModalProps> = ({
       />
 
       {/* Modal content */}
-      <div className="flex min-h-full items-center justify-center p-4">
+      <div className="relative z-10 flex min-h-full items-center justify-center p-4 pointer-events-none">
         <div
           ref={modalRef}
           className={cn(
-            'w-full bg-white dark:bg-neutral-900 rounded-xl shadow-2xl animate-scale-in',
+            'pointer-events-auto w-full bg-white dark:bg-neutral-900 rounded-xl shadow-2xl animate-scale-in',
             sizeClasses[size],
             className
           )}
@@ -131,6 +139,7 @@ export const Modal: React.FC<ModalProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

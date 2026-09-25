@@ -51,6 +51,7 @@ const Profiles: React.FC = () => {
           .eq('id', selectedProfile.id)
           .select();
         if (error) throw error;
+        if (!data?.length) throw new Error('No user was updated. Check that your account has permission to edit this user.');
         return data[0];
       } else {
         const { data, error } = await supabase
@@ -80,12 +81,14 @@ const Profiles: React.FC = () => {
   }) || [];
 
   const handleEditProfile = (profile: Profile) => {
+    profileMutation.reset();
     setSelectedProfile(profile);
     setIsEditMode(true);
     setIsModalOpen(true);
   };
 
   const handleCreateProfile = () => {
+    profileMutation.reset();
     setSelectedProfile({
       id: '',
       full_name: '',
@@ -200,7 +203,7 @@ const Profiles: React.FC = () => {
             <Input
               label="Employee Code"
               name="employee_code"
-              value={selectedProfile.employee_code}
+              value={selectedProfile.employee_code ?? ''}
               onChange={handleInputChange}
             />
             <Select
@@ -225,6 +228,11 @@ const Profiles: React.FC = () => {
               ]}
             />
           </div>
+          {profileMutation.isError && (
+            <p role="alert" className="mt-4 text-sm text-danger-600 dark:text-danger-400">
+              {profileMutation.error.message || 'Unable to save user details. Please try again.'}
+            </p>
+          )}
           <div className="mt-6 flex justify-end space-x-4">
             <Button
               variant="secondary"

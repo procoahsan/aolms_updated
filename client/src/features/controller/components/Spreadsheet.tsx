@@ -56,10 +56,10 @@ interface Technician {
 type SortDirection = 'asc' | 'desc';
 type SortConfig = { key: keyof Order; direction: SortDirection } | null;
 
-const Spreadsheet: React.FC = () => {
+const Spreadsheet: React.FC<{ projectId?: string }> = ({ projectId }) => {
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterProject, setFilterProject] = useState('');
+  const [filterProject, setFilterProject] = useState(projectId || '');
   const [filterTechnician, setFilterTechnician] = useState('');
   const [filterAction, setFilterAction] = useState('');
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
@@ -220,6 +220,7 @@ const Spreadsheet: React.FC = () => {
           </div>
           <Select
             label="Project"
+            disabled={!!projectId}
             value={filterProject}
             onChange={(e) => { setFilterProject(e.target.value); setPage(1); }}
             options={[{ value: '', label: 'All Projects' }, ...(projects || []).map(p => ({ value: p.id, label: p.name }))]}

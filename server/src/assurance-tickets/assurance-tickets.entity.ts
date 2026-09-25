@@ -1,13 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import { Project } from '../projects/projects.entity';
-import { Profile } from '../profiles/profiles.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'assurance_tickets' })
 export class AssuranceTicket {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Project)
+  @Column({ type: 'uuid' })
   project_id: string;
 
   @Column({ unique: true })
@@ -19,7 +17,7 @@ export class AssuranceTicket {
   @Column()
   team: string;
 
-  @ManyToOne(() => Profile)
+  @Column({ type: 'uuid', nullable: true })
   controller_id: string;
 
   @Column()
@@ -82,8 +80,18 @@ export class AssuranceTicket {
   @Column()
   status: string; // e.g., open, in_progress, resolved, closed
 
-  @ManyToOne(() => Profile)
+  @Column({ type: 'uuid', nullable: true })
   technician_id: string;
+
+
+  @Column({ type: 'jsonb', default: {} })
+  spreadsheet_fields: Record<string, unknown>;
+
+  @Column({ default: 1 })
+  version: number;
+
+  @Column({ type: 'uuid', nullable: true })
+  last_mutation_id: string;
 
   @CreateDateColumn()
   created_at: Date;

@@ -72,7 +72,7 @@ const Login: React.FC = () => {
 
       const routes: Record<string, string> = {
         admin: '/admin/dashboard',
-        controller: '/controller/dashboard',
+        controller: '/controller/projects',
         technician: '/technician/todo',
       };
       navigate(routes[userRole!]);

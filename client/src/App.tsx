@@ -10,7 +10,9 @@ import Profiles from './features/admin/pages/Profiles';
 import Projects from './features/admin/pages/Projects';
 import Profile from './features/admin/pages/Profile';
 import OperationsData from './features/admin/pages/OperationsData';
-import ControllerSpreadsheet from './features/controller/components/Spreadsheet';
+import ControllerProjects from './features/controller/pages/Projects';
+import AssuranceTasks from './features/technician/pages/AssuranceTasks';
+import AssuranceForm from './features/technician/components/AssuranceForm';
 import TechnicianDeliveryForm from './features/technician/components/DeliveryForm';
 import OperationsWorkspace from './features/operations/OperationsWorkspace';
 
@@ -35,16 +37,21 @@ function App() {
             </Route>
 
             <Route path="/controller/*" element={<ControllerLayout />}>
-              <Route index element={<Navigate to="orders" replace />} />
-              <Route path="dashboard" element={<Navigate to="../orders" replace />} />
-              <Route path="orders" element={<ControllerSpreadsheet />} />
+              <Route index element={<Navigate to="projects" replace />} />
+              <Route path="dashboard" element={<p>Controller Dashboard is not available yet.</p>} />
+              <Route path="projects" element={<ControllerProjects />} />
+              <Route path="orders" element={<Navigate to="../projects" replace />} />
+              <Route path="assurance-tickets" element={<Navigate to="../projects" replace />} />
               <Route path="legacy-operations" element={<OperationsWorkspace role="controller" />} />
             </Route>
 
             <Route path="/technician/*" element={<TechnicianLayout />}>
               <Route index element={<Navigate to="todo" replace />} />
               <Route path="dashboard" element={<Navigate to="../todo" replace />} />
-              <Route path="todo" element={<TechnicianDeliveryForm />} />
+              <Route path="todo" element={<AssuranceTasks todo />} />
+              <Route path="audit" element={<AssuranceTasks />} />
+              <Route path="history" element={<Navigate to="../audit" replace />} />
+              <Route path="assurance-form/:ticketId" element={<AssuranceForm />} />
               <Route path="delivery-form/:orderId" element={<TechnicianDeliveryForm />} />
               <Route path="legacy-operations" element={<Navigate to="../todo" replace />} />
             </Route>

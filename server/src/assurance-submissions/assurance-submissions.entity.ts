@@ -1,6 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import { AssuranceTicket } from '../assurance-tickets/assurance-tickets.entity';
-import { Profile } from '../profiles/profiles.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export enum AssuranceSubmissionStatus {
   Draft = 'draft',
@@ -13,10 +11,10 @@ export class AssuranceSubmission {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => AssuranceTicket)
+  @Column({ type: 'uuid' })
   ticket_id: string;
 
-  @ManyToOne(() => Profile)
+  @Column({ type: 'uuid' })
   technician_id: string;
 
   @Column({ type: 'enum', enum: AssuranceSubmissionStatus, default: AssuranceSubmissionStatus.Draft })
@@ -87,6 +85,13 @@ export class AssuranceSubmission {
 
   @Column({ nullable: true })
   remarks: string;
+
+
+  @Column({ default: 1 })
+  version: number;
+
+  @Column({ type: 'uuid', nullable: true })
+  last_mutation_id: string;
 
   @CreateDateColumn()
   created_at: Date;

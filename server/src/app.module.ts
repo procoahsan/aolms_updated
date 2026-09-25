@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { resolve } from 'node:path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
@@ -26,7 +27,7 @@ import { ServiceDeliveryModule } from './legacy-aolms/service-delivery/service-d
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.example', '.env'],
+      envFilePath: resolve(__dirname, '..', '.env'),
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,

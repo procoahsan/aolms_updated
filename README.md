@@ -65,8 +65,8 @@ AOLMS is a comprehensive task/order management and technical data-entry system d
    ```
 
 3. Set up environment variables:
-   - Create `.env` files in both the root directory and the `client` directory
-   - Use `.env.example` as a template
+   - Copy `server/.env.example` to `server/.env` and fill in the database credentials, `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, and `JWT_SECRET`. Configure the frontend separately in `client/.env`.
+   - The backend loads `server/.env` regardless of the working directory. Host environment variables take precedence. Use your Supabase database connection settings; the API secret key is not the database password.
 
 4. Set up the database:
    ```bash
@@ -93,7 +93,7 @@ AOLMS/
 ├── client/          # Frontend application
 ├── server/          # Backend application
 ├── docs/            # Project documentation
-├── .env.example     # Environment variables template
+├── server/.env.example     # Environment variables template
 └── README.md        # Project documentation
 ```
 

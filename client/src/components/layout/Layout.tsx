@@ -4,7 +4,7 @@ import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 
 export interface LayoutProps {
-  navItems: Array<{ label: string; path: string; icon: React.ReactNode }>;
+  navItems: Array<{ label: string; path: string; icon: React.ReactNode; disabled?: boolean }>;
   onLogout: () => Promise<void>;
   currentUser?: {
     name: string;
@@ -13,7 +13,7 @@ export interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ navItems, onLogout, currentUser }) => {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => window.innerWidth < 768);
   const location = useLocation();
 
   // Determine page title based on current route
@@ -23,6 +23,8 @@ export const Layout: React.FC<LayoutProps> = ({ navItems, onLogout, currentUser 
       dashboard: 'Dashboard',
       profiles: 'Users',
       projects: 'Projects',
+      audit: 'Audit',
+      todo: 'To-Do',
       'operations-data': 'Operations Data',
       'legacy-operations': 'Operations Center',
       me: 'My Profile',
@@ -31,7 +33,7 @@ export const Layout: React.FC<LayoutProps> = ({ navItems, onLogout, currentUser 
   };
 
   const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+    setIsSidebarCollapsed((collapsed) => !collapsed);
   };
 
   return (
@@ -40,7 +42,6 @@ export const Layout: React.FC<LayoutProps> = ({ navItems, onLogout, currentUser 
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={toggleSidebar}
         navItems={navItems}
-        onLogout={onLogout}
       />
       <div className="flex-1 flex flex-col min-w-0">
         <Header

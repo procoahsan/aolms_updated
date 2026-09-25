@@ -21,6 +21,7 @@ const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [validationError, setValidationError] = useState('');
 
   // Fetch projects
   const { data: projects, isLoading, error } = useQuery({
@@ -47,6 +48,7 @@ const Projects: React.FC = () => {
           .eq('id', selectedProject.id)
           .select();
         if (error) throw error;
+        if (!data?.length) throw new Error('Project was not updated. Check your permissions and try again.');
         return data[0];
       } else {
         const { data, error } = await supabase
@@ -54,6 +56,7 @@ const Projects: React.FC = () => {
           .insert(project)
           .select();
         if (error) throw error;
+        if (!data?.length) throw new Error('Project was not created. Please try again.');
         return data[0];
       }
     },
@@ -77,12 +80,16 @@ const Projects: React.FC = () => {
   });
 
   const handleEditProject = (project: Project) => {
+    projectMutation.reset();
+    setValidationError('');
     setSelectedProject(project);
     setIsEditMode(true);
     setIsModalOpen(true);
   };
 
   const handleCreateProject = () => {
+    projectMutation.reset();
+    setValidationError('');
     setSelectedProject({
       id: '',
       name: '',
@@ -108,11 +115,14 @@ const Projects: React.FC = () => {
   };
 
   const handleSaveProject = () => {
+    setValidationError('');
     const name = selectedProject?.name.trim();
     const code = selectedProject?.code.trim().toUpperCase();
     const isActive = selectedProject?.is_active;
     if (name && code && isActive !== undefined) {
       projectMutation.mutate({ name, code, is_active: isActive });
+    } else {
+      setValidationError('Enter both a project name and project code.');
     }
   };
 
@@ -226,6 +236,11 @@ const Projects: React.FC = () => {
           }
         >
           <div className="space-y-4">
+            {(validationError || projectMutation.isError) && (
+              <p role="alert" className="text-sm text-danger-600 dark:text-danger-400">
+                {validationError || projectMutation.error?.message || 'Unable to save project.'}
+              </p>
+            )}
             <Input
               label="Project Name"
               name="name"
