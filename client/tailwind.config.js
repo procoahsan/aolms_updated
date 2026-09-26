@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import { tokens } from './src/design-system/tokens';
+import forms from '@tailwindcss/forms';
+import colors from 'tailwindcss/colors';
 
 export default {
   content: [
@@ -11,6 +13,8 @@ export default {
     extend: {
       // Colors - map semantic CSS variables to Tailwind utilities
       colors: {
+        navy: { 950: '#091525', 900: '#101f33', 800: '#182b43', 700: '#263d58' },
+        electric: '#3b82f6', emerald: { ...colors.emerald, DEFAULT: '#10b981' }, purple: { ...colors.purple, DEFAULT: '#8b5cf6' }, coral: '#f43f5e', amber: { ...colors.amber, DEFAULT: '#f59e0b' },
         // Neutral
         neutral: {
           50: tokens.colors.neutral[50],
@@ -245,5 +249,5 @@ export default {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [forms({ strategy: 'class' })],
 };

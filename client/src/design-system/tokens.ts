@@ -9,17 +9,17 @@
 export const colorTokens = {
   // Neutral scale (used for backgrounds, surfaces, text, borders)
   neutral: {
-    50: '#f9fafb',
-    100: '#f3f4f6',
-    200: '#e5e7eb',
-    300: '#d1d5db',
-    400: '#9ca3af',
-    500: '#6b7280',
-    600: '#4b5563',
-    700: '#374151',
-    800: '#1f2937',
-    900: '#111827',
-    950: '#030712',
+    50: '#f3f8fc',
+    100: '#eaf2f8',
+    200: '#d5e2ee',
+    300: '#b5c7d9',
+    400: '#94abc1',
+    500: '#536d85',
+    600: '#425a72',
+    700: '#30465e',
+    800: '#1d324a',
+    900: '#11243a',
+    950: '#081626',
   },
 
   // Primary brand color

@@ -15,6 +15,12 @@ export const supabase = supabaseUrl && supabaseAnonKey
 
 // Create a QueryClient instance
 const queryClient = new QueryClient();
+let cachedUserId: string | null | undefined;
+supabase?.auth.onAuthStateChange((_event, session) => {
+  const userId = session?.user.id ?? null;
+  if (cachedUserId !== undefined && cachedUserId !== userId) queryClient.clear();
+  cachedUserId = userId;
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

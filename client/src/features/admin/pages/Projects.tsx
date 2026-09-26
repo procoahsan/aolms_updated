@@ -12,6 +12,7 @@ interface Project {
   name: string;
   code: string;
   is_active: boolean;
+  display_order: number;
   created_at: string;
   updated_at: string;
 }
@@ -31,7 +32,7 @@ const Projects: React.FC = () => {
       const { data, error } = await supabase
         .from('projects')
         .select('*')
-        .order('name');
+        .order('display_order').order('name').order('id');
       if (error) throw error;
       return data as Project[];
     },
@@ -62,6 +63,7 @@ const Projects: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['controller-projects'] });
       setIsModalOpen(false);
       setSelectedProject(null);
     },
@@ -95,6 +97,7 @@ const Projects: React.FC = () => {
       name: '',
       code: '',
       is_active: true,
+      display_order: 0,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });
@@ -119,8 +122,13 @@ const Projects: React.FC = () => {
     const name = selectedProject?.name.trim();
     const code = selectedProject?.code.trim().toUpperCase();
     const isActive = selectedProject?.is_active;
+    const displayOrder = Number(selectedProject?.display_order ?? 0);
+    if (!Number.isInteger(displayOrder) || displayOrder < 0 || displayOrder > 2147483647) {
+      setValidationError('Display order must be a whole number from 0 to 2147483647.');
+      return;
+    }
     if (name && code && isActive !== undefined) {
-      projectMutation.mutate({ name, code, is_active: isActive });
+      projectMutation.mutate({ name, code, is_active: isActive, display_order: displayOrder });
     } else {
       setValidationError('Enter both a project name and project code.');
     }
@@ -138,6 +146,7 @@ const Projects: React.FC = () => {
           <h1 className="text-h2 font-semibold text-neutral-900 dark:text-neutral-50">Projects</h1>
           <p className="text-body-sm text-neutral-500 dark:text-neutral-400 mt-1">
             {projects?.length || 0} projects configured
+            {' · Edit Display order to arrange projects for Admin and Controllers; lower numbers appear first.'}
           </p>
         </div>
         <Button variant="primary" onClick={handleCreateProject} leftIcon={<Plus className="w-4 h-4" />}>
@@ -177,6 +186,7 @@ const Projects: React.FC = () => {
                     {project.name}
                   </h3>
                   <p className="text-caption text-neutral-500 dark:text-neutral-400 font-mono">{project.code}</p>
+                  <p className="text-xs text-neutral-500">Display order: {project.display_order}</p>
                 </div>
                 <div className="hidden sm:flex items-center gap-2 ml-4">
                   {project.is_active ? (
@@ -259,6 +269,9 @@ const Projects: React.FC = () => {
               required
               className="uppercase"
             />
+            <Input label="Display order" type="number" name="display_order" min={0} step={1}
+              value={selectedProject.display_order} onChange={handleInputChange}
+              hint="Lower numbers appear first for Admin and Controllers. Ties are sorted by project name." />
           </div>
         </Modal>
       )}

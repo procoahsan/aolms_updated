@@ -9,10 +9,10 @@ import { Card } from '../../../components/Card';
 export default function ControllerProjects(){
  const [params,setParams]=useSearchParams();
  const [error,setError]=useState('');
- const projects=useQuery({queryKey:['controller-projects'],queryFn:()=>api<Array<{id:string;name:string;code:string;is_active:boolean}>>('/projects')});
+ const projects=useQuery({queryKey:['controller-projects'],queryFn:()=>api<Array<{id:string;name:string;code:string;is_active:boolean}>>('/projects'),refetchInterval:30000});
  const user=useQuery({queryKey:['session-user-id'],queryFn:currentUserId});
  const list=projects.data||[];
- const project=list.find(p=>p.id===params.get('project'))||list.find(p=>p.code==='SERVICE_ASSURANCE')||list[0];
+ const project=list.find(p=>p.id===params.get('project'))||list[0];
  if(projects.isPending||user.isPending)return <p>Loading projects...</p>;
  if(projects.error||user.error)return <p role="alert">{projects.error?.message||user.error?.message}</p>;
  return <div className="space-y-4"><h1 className="text-h2 font-semibold">Projects</h1>

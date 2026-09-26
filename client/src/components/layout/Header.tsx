@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Moon, Sun, Menu, User, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../app/theme/theme-context';
 import { Button } from '../Button';
 
@@ -22,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const isAdmin = useLocation().pathname.startsWith('/admin/');
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -48,10 +49,10 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b border-neutral-200 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-30 border-b border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Left side - Mobile menu and title */}
-        <div className="flex items-center gap-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-4">
           <button
             onClick={onToggleSidebar}
             className="md:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
@@ -59,15 +60,15 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Menu className="w-6 h-6 text-neutral-600 dark:text-neutral-400" aria-hidden="true" />
           </button>
-          <div>
-            <h2 className="text-h5 font-semibold text-neutral-900 dark:text-neutral-50">
+          <div className="min-w-0">
+            <h2 className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-50 sm:text-h5">
               {title}
             </h2>
           </div>
         </div>
 
         {/* Right side - Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           {/* Theme toggle */}
           <Button
             variant="ghost"
@@ -90,13 +91,15 @@ export const Header: React.FC<HeaderProps> = ({
               size="sm"
               className="gap-2 px-2"
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              aria-label={`Account: ${currentUser?.name || 'User'}`}
+              aria-expanded={isUserMenuOpen}
             >
               <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-950 flex items-center justify-center">
                 <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
                   {currentUser?.avatar || 'U'}
                 </span>
               </div>
-              <span className="hidden sm:block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <span className="hidden max-w-[180px] truncate text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:block">
                 {currentUser?.name || 'User'}
               </span>
             </Button>
@@ -104,14 +107,14 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Dropdown */}
             {isUserMenuOpen && (
               <div className="absolute right-0 z-50 mt-2 w-48 bg-white dark:bg-neutral-900 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-700 py-1 animate-fade-in">
-                <button
+                {isAdmin && <button
                   onClick={handleProfile}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                 >
                   <User className="w-4 h-4" aria-hidden="true" />
                   Profile
-                </button>
-                <div className="border-t border-neutral-200 dark:border-neutral-700 my-1" />
+                </button>}
+                {isAdmin && <div className="border-t border-neutral-200 dark:border-neutral-700 my-1" />}
                 <button
                   onClick={handleLogoutClick}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-danger-600 dark:text-danger-400 hover:bg-danger-50 dark:hover:bg-danger-950/30 transition-colors"

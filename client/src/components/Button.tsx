@@ -17,9 +17,12 @@ export const Button: React.FC<ButtonProps> = ({
   size = 'md',
   isLoading = false,
   disabled,
+  leftIcon,
+  rightIcon,
+  type = 'button',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]';
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
 
   const variantStyles = {
     primary: 'bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500 shadow-sm',
@@ -38,6 +41,8 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type={type}
+      aria-busy={isLoading || undefined}
       className={cn(
         baseStyles,
         variantStyles[variant],
@@ -49,8 +54,9 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {isLoading ? (
         <span className="inline-block animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" aria-hidden="true" />
-      ) : null}
+      ) : leftIcon}
       {children}
+      {rightIcon}
     </button>
   );
 };

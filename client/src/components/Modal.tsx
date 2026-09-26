@@ -45,7 +45,7 @@ export const Modal: React.FC<ModalProps> = ({
       // Trap focus
       if (e.key === 'Tab' && modalRef.current) {
         const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])'
         );
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
@@ -103,23 +103,23 @@ export const Modal: React.FC<ModalProps> = ({
       />
 
       {/* Modal content */}
-      <div className="relative z-10 flex min-h-full items-center justify-center p-4 pointer-events-none">
+      <div className="relative z-10 flex min-h-full items-center justify-center p-2 sm:p-4 pointer-events-none">
         <div
           ref={modalRef}
           className={cn(
-            'pointer-events-auto w-full bg-white dark:bg-neutral-900 rounded-xl shadow-2xl animate-scale-in',
+            'pointer-events-auto flex max-h-[calc(100vh-2rem)] w-full flex-col bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 rounded-xl shadow-2xl',
             sizeClasses[size],
             className
           )}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-700">
+          <div className="flex shrink-0 items-center justify-between gap-2 px-4 py-3 sm:px-6 border-b border-neutral-200 dark:border-neutral-700">
             <h3 id="modal-title" className="text-h5 text-neutral-900 dark:text-neutral-50">
               {title}
             </h3>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:text-neutral-300 dark:hover:bg-neutral-800 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
               aria-label="Close modal"
             >
               <X className="w-5 h-5" aria-hidden="true" />
@@ -127,13 +127,13 @@ export const Modal: React.FC<ModalProps> = ({
           </div>
 
           {/* Body */}
-          <div className="px-6 py-5">
+          <div className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6">
             {children}
           </div>
 
           {/* Footer */}
           {footer && (
-            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800/50 rounded-b-xl">
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-3 px-4 py-4 sm:px-6 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 rounded-b-xl">
               {footer}
             </div>
           )}

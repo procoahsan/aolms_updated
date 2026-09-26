@@ -18,7 +18,7 @@ export class ProjectsService {
   }
 
   async findAll(): Promise<Project[]> {
-    return this.projectsRepository.find();
+    return this.projectsRepository.find({ order: { display_order: 'ASC', name: 'ASC', id: 'ASC' } });
   }
 
   async findOne(id: string): Promise<Project> {

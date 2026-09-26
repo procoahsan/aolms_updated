@@ -8,6 +8,7 @@ import { Textarea } from '../../../components/Textarea';
 import { supabase } from '../../../main';
 import { Card } from '../../../components/Card';
 import { Save, Send, AlertCircle, CheckCircle } from 'lucide-react';
+import { currentUserId } from '../../assurance/api';
 
 interface DeliverySubmission {
   id: string;
@@ -47,7 +48,9 @@ const DeliveryForm: React.FC = () => {
   const [formData, setFormData] = useState<Partial<DeliverySubmission>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDraftSaved, setIsDraftSaved] = useState(false);
-  const [isEditAllowed, setIsEditAllowed] = useState(true);
+  const [now, setNow] = useState(Date.now());
+  const user = useQuery({ queryKey: ['session-user-id'], queryFn: currentUserId });
+  useEffect(() => { const timer = setInterval(() => setNow(Date.now()), 10000); return () => clearInterval(timer); }, []);
 
   const fetchOrder = async () => {
     if (!supabase) throw new Error('Supabase client not initialized');
@@ -66,41 +69,44 @@ const DeliveryForm: React.FC = () => {
       .from('delivery_submissions')
       .select('*')
       .eq('order_id', orderId)
-      .single();
+      .eq('technician_id', user.data!)
+      .maybeSingle();
     if (error && error.code !== 'PGRST116') throw error;
     return data;
   };
 
-  const { data: order } = useQuery({
+  const { data: order, isPending: orderLoading, error: orderError } = useQuery({
     queryKey: ['order', orderId],
     queryFn: fetchOrder,
   });
 
-  const { data: submission } = useQuery({
-    queryKey: ['deliverySubmission', orderId],
+  const { data: submission, isPending: submissionLoading, error: submissionError } = useQuery({
+    queryKey: ['deliverySubmission', orderId, user.data],
     queryFn: fetchDeliverySubmission,
+    enabled: !!user.data,
   });
+
+  const isEditAllowed = !submissionLoading && !submissionError && !!user.data && order?.technician_id === user.data && order?.action === 'Delivered'
+    && submission?.status !== 'locked'
+    && (!submission?.submitted_at || now < new Date(submission.submitted_at).getTime() + 86400000);
 
   useEffect(() => {
     if (order && submission) {
       setFormData(submission);
-      setIsEditAllowed(
-        submission.status !== 'locked' &&
-        (!submission.edit_deadline || new Date(submission.edit_deadline) > new Date())
-      );
     } else if (order) {
       setFormData({
         order_id: orderId,
-        technician_id: '',
+        technician_id: user.data,
         status: 'draft',
         last_saved_at: new Date().toISOString(),
       });
     }
-  }, [order, submission, orderId]);
+  }, [order, submission, orderId, user.data]);
 
   const saveDraftMutation = useMutation({
     mutationFn: async (data: Partial<DeliverySubmission>) => {
       if (!supabase) throw new Error('Supabase client not initialized');
+      if (!isEditAllowed) throw new Error('This form is no longer editable');
       if (submission) {
         const { data: updatedData, error } = await supabase
           .from('delivery_submissions')
@@ -108,6 +114,7 @@ const DeliveryForm: React.FC = () => {
           .eq('id', submission.id)
           .select();
         if (error) throw error;
+        if (!updatedData?.length) throw new Error('Form was not saved. The edit window may have expired.');
         return updatedData[0];
       } else {
         const { data: newData, error } = await supabase
@@ -122,6 +129,7 @@ const DeliveryForm: React.FC = () => {
       setFormData(savedData);
       setIsDraftSaved(true);
       queryClient.invalidateQueries({ queryKey: ['deliverySubmission', orderId] });
+      queryClient.invalidateQueries({ queryKey: ['delivery-tasks'] });
       setTimeout(() => setIsDraftSaved(false), 3000);
     },
   });
@@ -129,11 +137,13 @@ const DeliveryForm: React.FC = () => {
   const submitFormMutation = useMutation({
     mutationFn: async (data: Partial<DeliverySubmission>) => {
       if (!supabase) throw new Error('Supabase client not initialized');
+      if (!isEditAllowed) throw new Error('This form is no longer editable');
+      const submittedAt = submission?.submitted_at || new Date().toISOString();
       const submissionData = {
         ...data,
         status: 'submitted',
-        submitted_at: new Date().toISOString(),
-        edit_deadline: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        submitted_at: submittedAt,
+        edit_deadline: new Date(new Date(submittedAt).getTime() + 86400000).toISOString(),
       };
 
       if (submission) {
@@ -143,6 +153,7 @@ const DeliveryForm: React.FC = () => {
           .eq('id', submission.id)
           .select();
         if (error) throw error;
+        if (!updatedData?.length) throw new Error('Form was not saved. The edit window may have expired.');
         return updatedData[0];
       } else {
         const { data: newData, error } = await supabase
@@ -155,10 +166,11 @@ const DeliveryForm: React.FC = () => {
     },
     onSuccess: (submittedData) => {
       setFormData(submittedData);
-      setIsEditAllowed(false);
       queryClient.invalidateQueries({ queryKey: ['deliverySubmission', orderId] });
+      queryClient.invalidateQueries({ queryKey: ['delivery-tasks'] });
       navigate('/technician/todo');
     },
+    onSettled: () => setIsSubmitting(false),
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -185,6 +197,8 @@ const DeliveryForm: React.FC = () => {
     return `${hours}h ${minutes}m remaining`;
   };
 
+  if (user.error || orderError || submissionError) return <p role="alert">{user.error?.message || orderError?.message || submissionError?.message}</p>;
+  if (user.isPending || orderLoading || submissionLoading) return <p>Loading delivery form...</p>;
   if (!order) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -194,7 +208,7 @@ const DeliveryForm: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="mx-auto max-w-4xl space-y-4 break-words sm:space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-h2 font-semibold text-neutral-900 dark:text-neutral-50">Delivery Form</h1>
@@ -250,6 +264,7 @@ const DeliveryForm: React.FC = () => {
       </Card>
 
       {/* Technician Form */}
+      {(saveDraftMutation.error || submitFormMutation.error) && <p role="alert" className="text-danger-600">{saveDraftMutation.error?.message || submitFormMutation.error?.message}</p>}
       <Card title="Delivery Information" subtitle="Technician-entered information">
         <form className="space-y-6">
           {/* Section 1: Action & Root Cause */}
@@ -454,13 +469,14 @@ const DeliveryForm: React.FC = () => {
           )}
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="form-actions border-t border-neutral-200 dark:border-neutral-700">
             {isEditAllowed && (
               <Button
                 type="button"
                 variant="secondary"
                 onClick={handleSaveDraft}
                 isLoading={saveDraftMutation.isPending}
+                disabled={isSubmitting}
                 leftIcon={<Save className="w-4 h-4" />}
               >
                 Save Draft
@@ -478,6 +494,7 @@ const DeliveryForm: React.FC = () => {
                 variant="primary"
                 onClick={handleSubmit}
                 isLoading={isSubmitting}
+                disabled={saveDraftMutation.isPending}
                 leftIcon={<Send className="w-4 h-4" />}
               >
                 Submit

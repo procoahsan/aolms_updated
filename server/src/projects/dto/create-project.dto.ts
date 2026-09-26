@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, IsOptional, IsInt, Min } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -10,4 +10,9 @@ export class CreateProjectDto {
   @IsOptional()
   @IsBoolean()
   is_active?: boolean;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  display_order?: number;
 }

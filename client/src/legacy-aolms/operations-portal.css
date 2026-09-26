@@ -4,18 +4,17 @@
  * stylesheet reset body/html and changed every portal page.
  */
 .legacy-operations-space {
-  background: #0a0e1a;
+  background: var(--app-bg);
   border-radius: 16px;
-  color: #e2e8f0;
-  padding: 24px;
+  color: var(--app-ink);
+  padding: 12px;
+  min-width: 0;
 }
 
 .legacy-operations-space .glass,
 .legacy-operations-space .glass-card {
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
 }
 
 .legacy-operations-space .glass-card {
@@ -49,4 +48,40 @@
 
 .legacy-operations-space .animate-fade-in {
   animation: legacyFadeIn 0.4s ease-out forwards;
+}
+
+/* Older operational screens used dark-only utility classes. Keep corrections scoped. */
+.light .legacy-operations-space .text-white { color: #11243a; }
+.light .legacy-operations-space button.text-white,
+.light .legacy-operations-space .bg-blue-600.text-white { color: white; }
+.light .legacy-operations-space .text-slate-200,
+.light .legacy-operations-space .text-slate-300,
+.light .legacy-operations-space .text-slate-400,
+.light .legacy-operations-space .text-slate-500 { color: #425a72; }
+.light .legacy-operations-space .text-blue-400,
+.light .legacy-operations-space .text-electric { color: #1d4ed8; }
+.light .legacy-operations-space .text-emerald-400 { color: #166534; }
+.light .legacy-operations-space .text-amber-400 { color: #92400e; }
+.light .legacy-operations-space .text-purple-400 { color: #7e22ce; }
+.light .legacy-operations-space .text-rose-400 { color: #be123c; }
+.light .legacy-operations-space [class*='bg-navy-'],
+.light .legacy-operations-space .bg-slate-800,
+.light .legacy-operations-space .bg-slate-900 { background-color: #eaf2f8; color: #11243a; }
+.light .legacy-operations-space [class*='border-white/'] { border-color: #d5e2ee; }
+.legacy-operations-space input:not([type='checkbox']),
+.legacy-operations-space select,
+.legacy-operations-space textarea { color: var(--app-ink); background-color: var(--app-surface); border-color: var(--app-border); }
+.dark .legacy-operations-space .rdrCalendarWrapper,
+.dark .legacy-operations-space .rdrDateDisplayWrapper,
+.dark .legacy-operations-space .rdrDateDisplayItem,
+.dark .legacy-operations-space .rdrDefinedRangesWrapper,
+.dark .legacy-operations-space .rdrStaticRange { background: #11243a; color: #eef5fc; border-color: #30465e; }
+.dark .legacy-operations-space .rdrDayNumber span { color: #eef5fc; }
+.dark .legacy-operations-space .rdrDayPassive .rdrDayNumber span { color: #94abc1; }
+.legacy-operations-space .rdrMonths { flex-wrap: wrap; }
+.legacy-operations-space .rdrMonth { max-width: 100%; }
+@media (min-width: 768px) { .legacy-operations-space { padding: 20px; } }
+@media (max-width: 767px) {
+  .legacy-operations-space .glass, .legacy-operations-space .glass-card { backdrop-filter: none; }
+  .legacy-operations-space .rdrDefinedRangesWrapper { display: none; }
 }

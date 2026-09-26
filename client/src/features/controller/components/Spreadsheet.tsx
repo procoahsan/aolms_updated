@@ -82,7 +82,7 @@ const Spreadsheet: React.FC<{ projectId?: string }> = ({ projectId }) => {
     queryKey: ['projects'],
     queryFn: async () => {
       if (!supabase) throw new Error('Supabase client not initialized');
-      const { data, error } = await supabase.from('projects').select('*');
+      const { data, error } = await supabase.from('projects').select('*').order('display_order').order('name').order('id');
       if (error) throw error;
       return data as Project[];
     },

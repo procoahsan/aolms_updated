@@ -1,3 +1,4 @@
+import { randomId } from '../../../lib/uuid';
 import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api, ticketDraft, savePayload, type Draft, type Field, type Ticket } from '../../assurance/api';
@@ -24,8 +25,8 @@ export default function AssuranceSpreadsheet({projectId,userId}:{projectId:strin
   if(localStorage.getItem(key)!==storageSnapshot.current){setError('Draft changed in another tab. Reload before editing.');return false;}
   try{writeDraft(key,next);storageSnapshot.current=localStorage.getItem(key);setDrafts(next);setError('');return true;}catch{setError('Browser storage is unavailable or full. Keep this page open and export your draft.');setDrafts(next);return false;}
  }
- function edit(id:string,field:string,value:string){const draft=drafts[id]||ticketDraft(byId.get(id)!,fields);persist({...drafts,[id]:{...draft,mutation_id:crypto.randomUUID(),values:{...draft.values,[field]:value}}});setMessage('');}
- function add(){const id=crypto.randomUUID();persist({...drafts,[id]:{id,project_id:projectId,base_version:null,mutation_id:crypto.randomUUID(),values:{work_date:new Date().toISOString().slice(0,10),status:'Open',technician_id:''}}});setPage(0);}
+ function edit(id:string,field:string,value:string){const draft=drafts[id]||ticketDraft(byId.get(id)!,fields);persist({...drafts,[id]:{...draft,mutation_id:randomId(),values:{...draft.values,[field]:value}}});setMessage('');}
+ function add(){const id=randomId();persist({...drafts,[id]:{id,project_id:projectId,base_version:null,mutation_id:randomId(),values:{work_date:new Date().toISOString().slice(0,10),status:'Open',technician_id:''}}});setPage(0);}
  async function save(){
   if(localStorage.getItem(key)!==storageSnapshot.current){setError('Draft changed in another tab. Reload before saving.');return;}
   setSaving(true);setError('');setMessage('');
@@ -71,7 +72,7 @@ export default function AssuranceSpreadsheet({projectId,userId}:{projectId:strin
  <div className="flex gap-3"><Button variant="outline" disabled={page===0} onClick={()=>setPage(p=>p-1)}>Previous</Button><span>Page {page+1} of {Math.max(1,Math.ceil(ids.length/25))}</span><Button variant="outline" disabled={(page+1)*25>=ids.length} onClick={()=>setPage(p=>p+1)}>Next</Button></div>
  <Modal isOpen={!!reviewing} onClose={()=>setReview(null)} title="Review newer database values" size="xl">
  <p className="mb-3 text-sm">Your draft has not overwritten the database. Compare the fields before choosing which version to keep.</p>
- {reviewing&&latest?<><div className="max-h-80 overflow-auto"><table className="w-full text-sm"><thead><tr><th>Field</th><th>Your draft</th><th>Database</th></tr></thead><tbody>{fields.filter(f=>reviewing.values[f.key]!==ticketDraft(latest,fields).values[f.key]).map(f=><tr key={f.key}><td>{f.label}</td><td className="p-2">{reviewing.values[f.key]}</td><td className="p-2">{ticketDraft(latest,fields).values[f.key]}</td></tr>)}</tbody></table></div><div className="mt-4 flex gap-2"><Button onClick={()=>{persist({...drafts,[reviewing.id]:{...reviewing,base_version:latest.version,mutation_id:crypto.randomUUID()}});setReview(null);}}>Keep reviewed draft for next save</Button><Button variant="outline" onClick={()=>{const next={...drafts};delete next[reviewing.id];persist(next);setReview(null);}}>Use database version</Button></div></>:<p>This record is no longer available. Export the draft and ask an administrator to review it.</p>}
+ {reviewing&&latest?<><div className="max-h-80 overflow-auto"><table className="w-full text-sm"><thead><tr><th>Field</th><th>Your draft</th><th>Database</th></tr></thead><tbody>{fields.filter(f=>reviewing.values[f.key]!==ticketDraft(latest,fields).values[f.key]).map(f=><tr key={f.key}><td>{f.label}</td><td className="p-2">{reviewing.values[f.key]}</td><td className="p-2">{ticketDraft(latest,fields).values[f.key]}</td></tr>)}</tbody></table></div><div className="mt-4 flex gap-2"><Button onClick={()=>{persist({...drafts,[reviewing.id]:{...reviewing,base_version:latest.version,mutation_id:randomId()}});setReview(null);}}>Keep reviewed draft for next save</Button><Button variant="outline" onClick={()=>{const next={...drafts};delete next[reviewing.id];persist(next);setReview(null);}}>Use database version</Button></div></>:<p>This record is no longer available. Export the draft and ask an administrator to review it.</p>}
  </Modal>
  </div>;
 }

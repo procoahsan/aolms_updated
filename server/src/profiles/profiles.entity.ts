@@ -5,8 +5,8 @@ export class Profile {
   @PrimaryColumn({ type: 'uuid', default: () => 'gen_random_uuid()' })
   id: string;
 
-  @Column({ unique: true })
-  employee_code: string;
+  @Column({ type: 'text', unique: true, nullable: true })
+  employee_code: string | null;
 
   @Column()
   full_name: string;

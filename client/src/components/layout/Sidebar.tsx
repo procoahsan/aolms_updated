@@ -44,9 +44,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse,
       id="main-sidebar"
       inert={isMobile && isCollapsed}
       className={cn(
-        'fixed md:sticky top-0 left-0 h-screen z-50 md:z-20 shrink-0 transition-all duration-300 ease-in-out border-r border-neutral-200 dark:border-neutral-700',
+        'fixed md:sticky top-0 left-0 h-screen z-50 md:z-20 shrink-0 border-r border-neutral-200 dark:border-neutral-700',
         'bg-white dark:bg-neutral-900',
-        isCollapsed ? 'w-64 -translate-x-full md:translate-x-0 md:w-16' : 'w-64',
+        isCollapsed ? 'invisible w-64 -translate-x-full md:visible md:translate-x-0 md:w-16' : 'visible w-64',
       )}
     >
       <div className="flex flex-col h-full">
@@ -83,7 +83,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse,
               aria-label={item.label}
               title={isCollapsed ? item.label : undefined}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors',
+                'mb-1 flex min-h-[44px] items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                 location.pathname === item.path
                   ? 'bg-primary-50 text-primary-700 dark:bg-primary-950/30 dark:text-primary-300'
                   : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800',

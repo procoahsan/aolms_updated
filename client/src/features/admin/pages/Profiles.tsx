@@ -7,6 +7,7 @@ import { Input } from '../../../components/Input';
 import { Select } from '../../../components/Select';
 import { Modal } from '../../../components/Modal';
 import { Card } from '../../../components/Card';
+import { api } from '../../assurance/api';
 
 interface Profile {
   id: string;
@@ -25,6 +26,7 @@ const Profiles: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [password, setPassword] = useState('');
 
   // Fetch profiles
   const { data: profiles, isLoading } = useQuery({
@@ -44,28 +46,36 @@ const Profiles: React.FC = () => {
   const profileMutation = useMutation({
     mutationFn: async (profile: Partial<Profile>) => {
       if (!supabase) throw new Error('Supabase client not initialized');
+      const fields = {
+        full_name: profile.full_name?.trim(),
+        email: profile.email?.trim().toLowerCase(),
+        employee_code: profile.employee_code?.trim() || '',
+        role: profile.role,
+        is_active: profile.is_active,
+      };
+      if (!fields.full_name || !fields.email) throw new Error('Name and email are required');
       if (isEditMode && selectedProfile) {
         const { data, error } = await supabase
           .from('profiles')
-          .update(profile)
+          .update({ ...fields, employee_code: fields.employee_code || null })
           .eq('id', selectedProfile.id)
           .select();
         if (error) throw error;
         if (!data?.length) throw new Error('No user was updated. Check that your account has permission to edit this user.');
         return data[0];
       } else {
-        const { data, error } = await supabase
-          .from('profiles')
-          .insert(profile)
-          .select();
-        if (error) throw error;
-        return data[0];
+        if (password.length < 8) throw new Error('Password must contain at least 8 characters');
+        return api<Profile>('/profiles/accounts', {
+          method: 'POST',
+          body: JSON.stringify({ ...fields, password }),
+        });
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profiles'] });
       setIsModalOpen(false);
       setSelectedProfile(null);
+      setPassword('');
     },
   });
 
@@ -75,7 +85,7 @@ const Profiles: React.FC = () => {
       (searchTerm === '' ||
         profile.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         profile.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        profile.employee_code.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (profile.employee_code ?? '').toLowerCase().includes(searchTerm.toLowerCase())) &&
       (filterRole === '' || profile.role === filterRole)
     );
   }) || [];
@@ -89,6 +99,7 @@ const Profiles: React.FC = () => {
 
   const handleCreateProfile = () => {
     profileMutation.reset();
+    setPassword('');
     setSelectedProfile({
       id: '',
       full_name: '',
@@ -206,6 +217,17 @@ const Profiles: React.FC = () => {
               value={selectedProfile.employee_code ?? ''}
               onChange={handleInputChange}
             />
+            {!isEditMode && (
+              <Input
+                label="Initial Password"
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                hint="At least 8 characters. Used for the new user's first sign-in."
+              />
+            )}
             <Select
               label="Role"
               name="role"

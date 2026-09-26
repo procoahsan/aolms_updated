@@ -14,6 +14,9 @@ export class Project {
   @Column({ default: true })
   is_active: boolean;
 
+  @Column({ type: 'integer', default: 0 })
+  display_order: number;
+
   @CreateDateColumn()
   created_at: Date;
 

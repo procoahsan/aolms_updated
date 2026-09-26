@@ -8,8 +8,10 @@ import { Role } from '../auth/role.enum';
 @Controller('assurance-submissions')
 export class AssuranceSubmissionsController {
   constructor(private readonly service: AssuranceSubmissionsService) {}
-  @Get('audit') @Roles(Role.Technician)
+  @Get('audit') @Roles(Role.Admin,Role.Controller)
   audit(@Request() req:any) { return this.service.audit(req.user); }
+  @Get('tasks') @Roles(Role.Technician)
+  tasks(@Request() req:any) { return this.service.tasks(req.user); }
   @Get(':ticketId') @Roles(Role.Admin,Role.Controller,Role.Technician)
   get(@Param('ticketId') id:string,@Request() req:any,@Query('technician_id') owner?:string) { return this.service.get(id,req.user,owner); }
   @Post(':ticketId/save') @Roles(Role.Admin,Role.Controller,Role.Technician)

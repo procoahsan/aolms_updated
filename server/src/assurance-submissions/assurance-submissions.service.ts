@@ -18,6 +18,27 @@ export class AssuranceSubmissionsService {
   constructor(private readonly db: DataSource) {}
 
   async audit(actor: Actor) {
+    managerOnly(actor);
+    const rows = await this.db.query(`SELECT t.id,t.ticket_number,t.work_date,t.circuit,t.exchange,t.service_type,t.status,
+      owners.technician_id AS submission_technician_id,p.full_name AS technician_name,
+      s.id AS submission_id,s.submitted_at,(s.submitted_at IS NOT NULL) AS completed,
+      (owners.technician_id=t.technician_id AND t.status='Resolved') AS active_assignment,
+      s.submitted_at + interval '24 hours' AS edit_deadline,
+      (owners.technician_id=t.technician_id AND t.status='Resolved' AND coalesce(s.status::text,'draft') <> 'locked'
+        AND (s.submitted_at IS NULL OR clock_timestamp() < s.submitted_at + interval '24 hours')) AS can_edit
+      FROM assurance_tickets t
+      JOIN LATERAL (
+        SELECT t.technician_id WHERE t.status='Resolved'
+        UNION SELECT historical.technician_id FROM assurance_submissions historical
+          WHERE historical.ticket_id=t.id AND historical.submitted_at IS NOT NULL
+      ) owners ON true
+      LEFT JOIN assurance_submissions s ON s.ticket_id=t.id AND s.technician_id=owners.technician_id
+      LEFT JOIN profiles p ON p.id=owners.technician_id
+      ORDER BY (s.submitted_at IS NOT NULL) DESC,coalesce(s.submitted_at,t.updated_at) DESC,t.id,owners.technician_id`);
+    return { rows, counts: { completed: rows.filter((r:any)=>r.completed).length, pending: rows.filter((r:any)=>!r.completed).length }, server_time: new Date().toISOString() };
+  }
+
+  async tasks(actor: Actor) {
     if (actor.role !== 'technician') throw new ForbiddenException('Technician access required');
     const rows = await this.db.query(`SELECT t.id,t.ticket_number,t.work_date,t.circuit,t.exchange,t.service_type,t.status,t.technician_id,
       p.full_name AS technician_name,s.id AS submission_id,s.status AS submission_status,s.submitted_at,s.updated_at AS submission_updated_at,

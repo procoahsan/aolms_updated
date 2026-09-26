@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, ValidationPipe } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -6,6 +6,7 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
+import { CreateAccountDto } from './dto/create-account.dto';
 
 @ApiTags('profiles')
 @ApiBearerAuth()
@@ -13,6 +14,12 @@ import { Role } from '../auth/role.enum';
 @Controller('profiles')
 export class ProfilesController {
   constructor(private profilesService: ProfilesService) {}
+
+  @Post('accounts')
+  @Roles(Role.Admin)
+  createAccount(@Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })) body: CreateAccountDto) {
+    return this.profilesService.createAccount(body);
+  }
 
   @Post()
   @Roles(Role.Admin)

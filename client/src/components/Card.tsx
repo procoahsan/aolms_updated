@@ -28,14 +28,14 @@ export const Card: React.FC<CardProps> = ({
   const paddingStyles = {
     none: '',
     sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
+    md: 'p-3 sm:p-5 lg:p-6',
+    lg: 'p-4 sm:p-6 lg:p-8',
   };
 
   return (
     <div
       className={cn(
-        'rounded-xl transition-shadow duration-200',
+        'min-w-0 rounded-2xl',
         variantStyles[variant],
         paddingStyles[padding],
         className
@@ -43,7 +43,7 @@ export const Card: React.FC<CardProps> = ({
       {...props}
     >
       {title && (
-        <div className="mb-4">
+        <div className={cn('mb-4', padding === 'none' && 'px-4 pt-4')}>
           <h3 className="text-h5 text-neutral-900 dark:text-neutral-50">
             {title}
           </h3>

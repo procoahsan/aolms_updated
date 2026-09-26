@@ -1,25 +1,27 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import { ThemeProvider } from './app/theme/theme-context';
 import Login from './auth/pages/Login';
 import AdminLayout from './features/admin/layout/AdminLayout';
 import ControllerLayout from './features/controller/layout/ControllerLayout';
 import TechnicianLayout from './features/technician/layout/TechnicianLayout';
 import { ProtectedRoute } from './auth/components/ProtectedRoute';
-import AdminDashboard from './features/admin/pages/Dashboard';
-import Profiles from './features/admin/pages/Profiles';
-import Projects from './features/admin/pages/Projects';
-import Profile from './features/admin/pages/Profile';
-import OperationsData from './features/admin/pages/OperationsData';
-import ControllerProjects from './features/controller/pages/Projects';
-import AssuranceTasks from './features/technician/pages/AssuranceTasks';
-import AssuranceForm from './features/technician/components/AssuranceForm';
-import TechnicianDeliveryForm from './features/technician/components/DeliveryForm';
-import OperationsWorkspace from './features/operations/OperationsWorkspace';
+const AdminDashboard = lazy(() => import('./features/admin/pages/Dashboard'));
+const Profiles = lazy(() => import('./features/admin/pages/Profiles'));
+const Projects = lazy(() => import('./features/admin/pages/Projects'));
+const Profile = lazy(() => import('./features/admin/pages/Profile'));
+const OperationsData = lazy(() => import('./features/admin/pages/OperationsData'));
+const ControllerProjects = lazy(() => import('./features/controller/pages/Projects'));
+const AssuranceTasks = lazy(() => import('./features/technician/pages/AssuranceTasks'));
+const AssuranceForm = lazy(() => import('./features/technician/components/AssuranceForm'));
+const TechnicianDeliveryForm = lazy(() => import('./features/technician/components/DeliveryForm'));
+const OperationsWorkspace = lazy(() => import('./features/operations/OperationsWorkspace'));
 
 function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <Suspense fallback={<div role="status" className="p-6">Loading page…</div>}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
@@ -40,6 +42,7 @@ function App() {
               <Route index element={<Navigate to="projects" replace />} />
               <Route path="dashboard" element={<p>Controller Dashboard is not available yet.</p>} />
               <Route path="projects" element={<ControllerProjects />} />
+              <Route path="audit" element={<AssuranceTasks audit />} />
               <Route path="orders" element={<Navigate to="../projects" replace />} />
               <Route path="assurance-tickets" element={<Navigate to="../projects" replace />} />
               <Route path="legacy-operations" element={<OperationsWorkspace role="controller" />} />
@@ -49,8 +52,10 @@ function App() {
               <Route index element={<Navigate to="todo" replace />} />
               <Route path="dashboard" element={<Navigate to="../todo" replace />} />
               <Route path="todo" element={<AssuranceTasks todo />} />
-              <Route path="audit" element={<AssuranceTasks />} />
-              <Route path="history" element={<Navigate to="../audit" replace />} />
+              <Route path="submitted" element={<AssuranceTasks />} />
+              <Route path="audit" element={<Navigate to="../submitted" replace />} />
+              <Route path="history" element={<Navigate to="../submitted" replace />} />
+              <Route path="settings" element={<Navigate to="../todo" replace />} />
               <Route path="assurance-form/:ticketId" element={<AssuranceForm />} />
               <Route path="delivery-form/:orderId" element={<TechnicianDeliveryForm />} />
               <Route path="legacy-operations" element={<Navigate to="../todo" replace />} />
@@ -59,6 +64,7 @@ function App() {
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Route>
         </Routes>
+        </Suspense>
       </BrowserRouter>
     </ThemeProvider>
   );
