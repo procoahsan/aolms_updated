@@ -8,13 +8,14 @@ export default {
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: 'class',
+  // Plain descendant selectors also work on browsers without :is() support.
+  darkMode: ['variant', '.dark &'],
   theme: {
     extend: {
       // Colors - map semantic CSS variables to Tailwind utilities
       colors: {
         navy: { 950: '#091525', 900: '#101f33', 800: '#182b43', 700: '#263d58' },
-        electric: '#3b82f6', emerald: { ...colors.emerald, DEFAULT: '#10b981' }, purple: { ...colors.purple, DEFAULT: '#8b5cf6' }, coral: '#f43f5e', amber: { ...colors.amber, DEFAULT: '#f59e0b' },
+        electric: { DEFAULT: '#2563eb', dark: '#1d4ed8', light: '#93c5fd' }, emerald: { ...colors.emerald, DEFAULT: '#10b981' }, purple: { ...colors.purple, DEFAULT: '#8b5cf6' }, coral: '#f43f5e', amber: { ...colors.amber, DEFAULT: '#f59e0b' },
         // Neutral
         neutral: {
           50: tokens.colors.neutral[50],

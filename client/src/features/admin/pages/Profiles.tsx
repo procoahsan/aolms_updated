@@ -84,7 +84,7 @@ const Profiles: React.FC = () => {
     return (
       (searchTerm === '' ||
         profile.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        profile.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (profile.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
         (profile.employee_code ?? '').toLowerCase().includes(searchTerm.toLowerCase())) &&
       (filterRole === '' || profile.role === filterRole)
     );

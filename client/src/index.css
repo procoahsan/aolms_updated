@@ -52,6 +52,7 @@ pre { overflow-wrap: anywhere; }
 .app-main h1, .app-main h2, .app-main h3 { overflow-wrap: break-word; }
 .task-action { display: inline-flex; min-height: 44px; min-width: 76px; align-items: center; justify-content: center; border-radius: 10px; padding: 10px 16px; background: #2563eb; color: white; font-weight: 600; text-decoration: none; }
 .task-action:hover { background: #1d4ed8; }
+.task-action:disabled { opacity: .55; cursor: not-allowed; }
 .task-action--view { background: #eaf2f8; color: #30465e; }
 .dark .task-action--view { background: #1d324a; color: #eef5fc; }
 .task-card { border: 1px solid var(--app-border); border-radius: 14px; background: var(--app-surface); padding: 16px; overflow-wrap: anywhere; }

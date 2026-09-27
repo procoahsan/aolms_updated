@@ -82,6 +82,9 @@
 .legacy-operations-space .rdrMonth { max-width: 100%; }
 @media (min-width: 768px) { .legacy-operations-space { padding: 20px; } }
 @media (max-width: 767px) {
+  .legacy-operations-space header { flex-direction: column; gap: 16px; }
+  .legacy-operations-space header > div { max-width: 100%; flex-wrap: wrap; }
+  .legacy-operations-space .animate-fade-in { animation: none; }
   .legacy-operations-space .glass, .legacy-operations-space .glass-card { backdrop-filter: none; }
   .legacy-operations-space .rdrDefinedRangesWrapper { display: none; }
 }

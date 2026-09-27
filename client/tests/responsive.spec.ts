@@ -32,6 +32,8 @@ async function fixtures(page: Page, role: string, theme: string) {
     const path = new URL(route.request().url()).pathname;
     let data: unknown = [];
     if (path === '/api/projects') data = [project];
+    else if (/\/equipment\/.*\/meta$/.test(path)) data = {categories:[{category:'Delivery Assurance',count:1},{category:'Huawei',count:1}],years:['2026','2023']};
+    else if (path.includes('/equipment/')) data = {rows:[{id:ticketId,category:path.includes('/ont')?'Huawei':'Delivery Assurance',version:1,source_sheet:'2026 Delivery Assurance',source_row:3,source_year:'2026',data:{serial_number:'485754431E9962B3',model:'Huawei',quantity:1,order_number:'2708459'}}],total:1};
     else if (/assurance-submissions\/(tasks|audit)$/.test(path)) data = { rows: [ticket, { ...ticket, id: orderId, ticket_number: 'SA-1002', completed: true, submitted_at: new Date().toISOString(), edit_deadline: new Date(Date.now()+86400000).toISOString(), submission_technician_id: uid }], counts: { completed: 1, pending: 1 }, server_time: new Date().toISOString() };
     else if (path.endsWith('/save')) data = { id: ticketId, technician_id: uid, version: 1, submitted_at: new Date().toISOString(), status: 'submitted' };
     else if (path.includes('/assurance-submissions/')) data = { ticket, submission: null, can_edit: true, server_time: new Date().toISOString(), options: { root_cause: ['Cable'], resolution: ['Repaired'] } };
@@ -44,7 +46,7 @@ async function fixtures(page: Page, role: string, theme: string) {
 }
 
 async function noOverflow(page: Page) {
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),page.url()).toBe(true);
 }
 
 for (const theme of ['light', 'dark']) {
@@ -79,7 +81,7 @@ for (const theme of ['light', 'dark']) {
     test(`${role} screens ${theme}`, async ({ page }) => {
       const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
       await fixtures(page, role, theme);
-      const routes = role === 'admin' ? ['dashboard', 'profiles', 'projects', 'profile/me', 'operations-data', 'legacy-operations'] : ['projects', 'audit', 'legacy-operations'];
+      const routes = role === 'admin' ? ['dashboard', 'profiles', 'projects', 'profile/me', 'operations-data', 'legacy-operations'] : ['projects', 'audit', 'ont-db', 'cpe-db', 'legacy-operations'];
       for (const width of [375, 1024]) {
         await page.setViewportSize({ width, height: 850 });
         for (const route of routes) {
@@ -87,6 +89,10 @@ for (const theme of ['light', 'dark']) {
           await expect(page.getByRole('button', { name: 'Account: Test Technician' })).toBeVisible();
           await expect(page.locator('main').getByText(/^Loading/)).toHaveCount(0);
           await noOverflow(page);
+          if(route==='legacy-operations') {
+            await page.getByRole('button',{name:'Service delivery',exact:true}).click();
+            await noOverflow(page);
+          }
         }
       }
       expect(errors).toEqual([]);
@@ -117,4 +123,29 @@ test('manual theme overrides system preference and mobile modal fits', async ({ 
   const input = dialog.locator('input').first();
   expect(await input.evaluate(el => getComputedStyle(el).color)).toBe('rgb(243, 248, 252)');
   await noOverflow(page);
+});
+
+test('controller equipment filters, editing and save errors on mobile',async({page})=>{
+ await fixtures(page,'controller','dark');await page.setViewportSize({width:375,height:850});
+ await page.goto('/controller/cpe-db');
+ await page.getByRole('button',{name:'Delivery Assurance (1)',exact:true}).click();
+ await page.getByRole('combobox',{name:'Source year',exact:true}).selectOption('2023');
+ const request=page.waitForRequest(r=>r.url().includes('/equipment/cpe?')&&r.url().includes('search=SN'));
+ await page.getByPlaceholder('Serial, order, PO or any field').fill('SN');await request;
+ await page.getByRole('button',{name:'Edit',exact:true}).click();
+ await page.getByLabel('Quantity',{exact:true}).fill('2');
+ await noOverflow(page);
+ await page.route('**/api/equipment/cpe/*',async route=>{
+  if(route.request().method()==='PATCH')await route.fulfill({status:409,contentType:'application/json',body:JSON.stringify({message:'Record changed. Close and refresh before editing again.'})});else await route.fallback();
+ });
+ await page.getByRole('button',{name:'Save record',exact:true}).click();
+ await expect(page.getByRole('alert')).toContainText('Record changed');
+ await expect(page.getByLabel('Quantity',{exact:true})).toHaveValue('2');
+ await page.getByRole('button',{name:'Cancel',exact:true}).click();
+ await page.getByRole('button',{name:'Add record',exact:true}).click();
+ await page.getByLabel('Serial Number',{exact:true}).fill('NEW-SERIAL');
+ const saved=page.waitForRequest(r=>r.url().endsWith('/equipment/cpe')&&r.method()==='POST');
+ await page.getByRole('button',{name:'Save record',exact:true}).click();
+ expect((await saved).postDataJSON().category).toBe('Delivery Assurance');
+ await expect(page.getByRole('dialog')).toHaveCount(0);
 });

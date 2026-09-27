@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { EquipmentModule } from './equipment/equipment.module';
 import { ConfigModule } from '@nestjs/config';
 import { resolve } from 'node:path';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -25,6 +26,7 @@ import { ServiceDeliveryModule } from './legacy-aolms/service-delivery/service-d
 
 @Module({
   imports: [
+    EquipmentModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: resolve(__dirname, '..', '.env'),

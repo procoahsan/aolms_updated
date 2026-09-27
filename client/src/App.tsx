@@ -12,6 +12,7 @@ const Projects = lazy(() => import('./features/admin/pages/Projects'));
 const Profile = lazy(() => import('./features/admin/pages/Profile'));
 const OperationsData = lazy(() => import('./features/admin/pages/OperationsData'));
 const ControllerProjects = lazy(() => import('./features/controller/pages/Projects'));
+const EquipmentDatabase = lazy(() => import('./features/controller/pages/EquipmentDatabase'));
 const AssuranceTasks = lazy(() => import('./features/technician/pages/AssuranceTasks'));
 const AssuranceForm = lazy(() => import('./features/technician/components/AssuranceForm'));
 const TechnicianDeliveryForm = lazy(() => import('./features/technician/components/DeliveryForm'));
@@ -43,6 +44,8 @@ function App() {
               <Route path="dashboard" element={<p>Controller Dashboard is not available yet.</p>} />
               <Route path="projects" element={<ControllerProjects />} />
               <Route path="audit" element={<AssuranceTasks audit />} />
+              <Route path="ont-db" element={<EquipmentDatabase kind="ont" />} />
+              <Route path="cpe-db" element={<EquipmentDatabase kind="cpe" />} />
               <Route path="orders" element={<Navigate to="../projects" replace />} />
               <Route path="assurance-tickets" element={<Navigate to="../projects" replace />} />
               <Route path="legacy-operations" element={<OperationsWorkspace role="controller" />} />

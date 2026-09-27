@@ -35,6 +35,8 @@ export const Layout: React.FC<LayoutProps> = ({ navItems, onLogout, currentUser 
       profiles: 'Users',
       projects: 'Projects',
       audit: 'Audit',
+      'ont-db': 'ONT DB',
+      'cpe-db': 'CPE DB',
       todo: 'To-Do',
       submitted: 'Submitted Orders',
       'operations-data': 'Operations Data',
