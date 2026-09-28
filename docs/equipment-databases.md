@@ -10,8 +10,8 @@ The authenticated `/api/equipment/:kind` API permits Admin and Controller roles 
 
 ## Import and verification
 
-1. Run `server/scripts/extract-equipment.py` with the ONT workbook path, CPE workbook path and an output JSON path outside the repository. It requires Python with openpyxl and does not modify the workbooks.
-2. Run `node server/scripts/import-equipment.cjs <JSON path>` using backend database environment settings. It applies the additive migration and imports in one transaction. Re-running skips existing source workbook/sheet/row identities and preserves controller edits. This is an initial-source import, not a synchronization tool for subsequently reordered workbooks.
-3. After building the backend, run `node server/scripts/verify-equipment.cjs <JSON path>` to check initial totals, filtering, updates, conflicts, audit records and access configuration. Verification rolls back its test writes. Initial-total assertions assume no later additions.
+1. Run `scripts/maintenance/extract-equipment.py` with the ONT workbook path, CPE workbook path and an output JSON path outside the repository. It requires Python with openpyxl and does not modify the workbooks.
+2. Run `node scripts/maintenance/import-equipment.cjs <JSON path>` using the database settings in root `.env.local`. It applies the additive migration and imports in one transaction. Re-running skips existing source workbook/sheet/row identities and preserves controller edits. This is an initial-source import, not a synchronization tool for subsequently reordered workbooks.
+3. Run `npm test` for equipment validation, version conflicts and API access checks. Run `npm run test:browser` for the equipment editing interface. These tests do not assert initial import totals in the live database.
 
-Source workbooks and extracted customer data are not committed to the repository.
+The ONT/CPE workbooks used by this import and its extracted JSON are supplied externally. Older migration workbooks remain under `database/import-backups`; the application reads database records at runtime.

@@ -8,3 +8,9 @@ build
 .vscode
 .idea
 !.env.example
+.next/
+*.tsbuildinfo
+next-env.d.ts
+playwright-report/
+test-results/
+lint-results.txt

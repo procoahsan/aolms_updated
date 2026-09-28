@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict'),path=require('node:path');
+const {Client}=require('pg');require('dotenv').config({path:path.join(__dirname,'../.env'),quiet:true});
+const {OperationsDatabase}=require('../dist/legacy-aolms/operations-database');
+const {StaffService}=require('../dist/legacy-aolms/staff/staff.service');
+const {LogisticsService}=require('../dist/legacy-aolms/logistics/logistics.service');
+const {ServiceDeliveryService}=require('../dist/legacy-aolms/service-delivery/service-delivery.service');
+const db=new Client({host:process.env.DB_HOST,port:+process.env.DB_PORT,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_DATABASE,ssl:{rejectUnauthorized:false}});
+(async()=>{await db.connect();const store=new OperationsDatabase({query:async(sql,args)=>(await db.query(sql,args)).rows});
+ const counts=(await db.query('SELECT source_file,count(*)::int n FROM operations_history GROUP BY source_file')).rows;assert.equal(counts.length,8);assert.equal(counts.reduce((n,r)=>n+r.n,0),92017);
+ const staff=new StaffService(store);assert.equal((await staff.getStats()).total,63);
+ const logistics=new LogisticsService(store);const tickets=await logistics.records();assert.ok(tickets.allDates.length>0);assert.ok(tickets.data.length>0);await logistics.checkOntSerials(tickets.selectedDate);
+ const delivery=new ServiceDeliveryService(store);const status=await delivery.getStatus();assert.ok(status.wbsRecordCount>0);assert.ok(status.responseRecordCount>0);
+ await delivery.dataVerification(status.selectedDate);await delivery.crossVerifyOntCheck(status.selectedDate);await delivery.finalOutput();
+ // New service instances reconstruct all state from PostgreSQL, like a cold start.
+ assert.deepEqual(await new ServiceDeliveryService(store).getStatus(),status);
+ assert.equal((await new StaffService(store).getStats()).total,63);
+ console.log(JSON.stringify({historyRows:counts.reduce((n,r)=>n+r.n,0),sourceFiles:counts.length,staff:63,logisticsDates:tickets.allDates.length,deliveryStatus:status,result:'PASS: persistent records, verification, inventory lookups, cold-start reconstruction'},null,2));
+})().catch(e=>{console.error(e.message);process.exitCode=1}).finally(()=>db.end());

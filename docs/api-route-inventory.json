@@ -1,0 +1,1533 @@
+[
+  {
+    "route": "",
+    "method": "GET",
+    "class": "AppController",
+    "action": "getHello",
+    "roles": [],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "assurance-submissions/audit",
+    "method": "GET",
+    "class": "AssuranceSubmissionsController",
+    "action": "audit",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "project_id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "assurance-submissions/tasks",
+    "method": "GET",
+    "class": "AssuranceSubmissionsController",
+    "action": "tasks",
+    "roles": [
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "assurance-submissions/[id]",
+    "method": "GET",
+    "class": "AssuranceSubmissionsController",
+    "action": "get",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "ticketId",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "technician_id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "ticketId": "id"
+    }
+  },
+  {
+    "route": "assurance-submissions/[id]/save",
+    "method": "POST",
+    "class": "AssuranceSubmissionsController",
+    "action": "save",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "ticketId",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "unknown",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "ticketId": "id"
+    }
+  },
+  {
+    "route": "assurance-tickets/metadata",
+    "method": "GET",
+    "class": "AssuranceTicketsController",
+    "action": "metadata",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "assurance-tickets/batch",
+    "method": "POST",
+    "class": "AssuranceTicketsController",
+    "action": "save",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "unknown",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "assurance-tickets",
+    "method": "GET",
+    "class": "AssuranceTicketsController",
+    "action": "list",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "project_id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "assurance-tickets/[id]",
+    "method": "GET",
+    "class": "AssuranceTicketsController",
+    "action": "one",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "attachments",
+    "method": "GET",
+    "class": "AttachmentsController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "audit-logs",
+    "method": "GET",
+    "class": "AuditLogsController",
+    "action": "findAll",
+    "roles": [
+      "admin"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "cpe-inventory",
+    "method": "POST",
+    "class": "CpeInventoryController",
+    "action": "create",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateCpeInventoryDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "cpe-inventory",
+    "method": "GET",
+    "class": "CpeInventoryController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Query",
+        "key": "project_id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "serial_number",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "cpe-inventory/[id]",
+    "method": "GET",
+    "class": "CpeInventoryController",
+    "action": "findOne",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "cpe-inventory/[id]",
+    "method": "PATCH",
+    "class": "CpeInventoryController",
+    "action": "update",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "UpdateCpeInventoryDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "cpe-inventory/[id]",
+    "method": "DELETE",
+    "class": "CpeInventoryController",
+    "action": "remove",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "cpe-replacements",
+    "method": "GET",
+    "class": "CpeReplacementsController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "delivery-submissions",
+    "method": "POST",
+    "class": "DeliverySubmissionsController",
+    "action": "create",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateDeliverySubmissionDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "delivery-submissions/[id]",
+    "method": "GET",
+    "class": "DeliverySubmissionsController",
+    "action": "findOneByOrderId",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "orderId",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "orderId": "id"
+    }
+  },
+  {
+    "route": "delivery-submissions/[id]",
+    "method": "PATCH",
+    "class": "DeliverySubmissionsController",
+    "action": "update",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "UpdateDeliverySubmissionDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "delivery-submissions/[id]/submit",
+    "method": "POST",
+    "class": "DeliverySubmissionsController",
+    "action": "submit",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "delivery-submissions/[id]",
+    "method": "DELETE",
+    "class": "DeliverySubmissionsController",
+    "action": "remove",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "equipment/[kind]/meta",
+    "method": "GET",
+    "class": "EquipmentController",
+    "action": "meta",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "kind",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "kind": "kind"
+    }
+  },
+  {
+    "route": "equipment/[kind]",
+    "method": "GET",
+    "class": "EquipmentController",
+    "action": "list",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "kind",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "",
+        "type": "Record<string,string>",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "kind": "kind"
+    }
+  },
+  {
+    "route": "equipment/[kind]",
+    "method": "POST",
+    "class": "EquipmentController",
+    "action": "create",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "kind",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "kind": "kind"
+    }
+  },
+  {
+    "route": "equipment/[kind]/[id]",
+    "method": "PATCH",
+    "class": "EquipmentController",
+    "action": "update",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "kind",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": true,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "kind": "kind",
+      "id": "id"
+    }
+  },
+  {
+    "route": "logistics",
+    "method": "GET",
+    "class": "LogisticsController",
+    "action": "records",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "logistics/change-date",
+    "method": "POST",
+    "class": "LogisticsController",
+    "action": "date",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "selectedDate",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "logistics/check-ont",
+    "method": "POST",
+    "class": "LogisticsController",
+    "action": "ont",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "selectedDate",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "service-delivery/status",
+    "method": "GET",
+    "class": "ServiceDeliveryController",
+    "action": "status",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "service-delivery/records",
+    "method": "GET",
+    "class": "ServiceDeliveryController",
+    "action": "records",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "service-delivery/change-date",
+    "method": "POST",
+    "class": "ServiceDeliveryController",
+    "action": "date",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "selectedDate",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "service-delivery/data-verification",
+    "method": "POST",
+    "class": "ServiceDeliveryController",
+    "action": "verify",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "selectedDate",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "service-delivery/cross-verify-ont",
+    "method": "POST",
+    "class": "ServiceDeliveryController",
+    "action": "ont",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "selectedDate",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "service-delivery/final-output",
+    "method": "POST",
+    "class": "ServiceDeliveryController",
+    "action": "final",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "staff",
+    "method": "GET",
+    "class": "StaffController",
+    "action": "getAll",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Query",
+        "key": "",
+        "type": "StaffQueryDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "staff/stats",
+    "method": "GET",
+    "class": "StaffController",
+    "action": "getStats",
+    "roles": [
+      "admin"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "staff/[id]",
+    "method": "GET",
+    "class": "StaffController",
+    "action": "getById",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "number",
+        "validate": false,
+        "uuid": false,
+        "integer": true
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "ont-inventory",
+    "method": "POST",
+    "class": "OntInventoryController",
+    "action": "create",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateOntInventoryDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "ont-inventory",
+    "method": "GET",
+    "class": "OntInventoryController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Query",
+        "key": "model",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "status",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "ont-inventory/[id]",
+    "method": "GET",
+    "class": "OntInventoryController",
+    "action": "findOne",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "ont-inventory/[id]",
+    "method": "PATCH",
+    "class": "OntInventoryController",
+    "action": "update",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "UpdateOntInventoryDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "ont-inventory/[id]",
+    "method": "DELETE",
+    "class": "OntInventoryController",
+    "action": "remove",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "order-assignments",
+    "method": "POST",
+    "class": "OrderAssignmentsController",
+    "action": "create",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateOrderAssignmentDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "order-assignments",
+    "method": "GET",
+    "class": "OrderAssignmentsController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Request",
+        "key": "",
+        "type": "any",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "order-assignments/[id]",
+    "method": "GET",
+    "class": "OrderAssignmentsController",
+    "action": "findOne",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "order-assignments/[id]",
+    "method": "PATCH",
+    "class": "OrderAssignmentsController",
+    "action": "update",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "UpdateOrderAssignmentDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "order-assignments/[id]",
+    "method": "DELETE",
+    "class": "OrderAssignmentsController",
+    "action": "remove",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "orders",
+    "method": "POST",
+    "class": "OrdersController",
+    "action": "create",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateOrderDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "orders",
+    "method": "GET",
+    "class": "OrdersController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Query",
+        "key": "project_id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "technician_id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Query",
+        "key": "work_date",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "orders/[id]",
+    "method": "GET",
+    "class": "OrdersController",
+    "action": "findOne",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "orders/[id]",
+    "method": "PATCH",
+    "class": "OrdersController",
+    "action": "update",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "UpdateOrderDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "orders/[id]",
+    "method": "DELETE",
+    "class": "OrdersController",
+    "action": "remove",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "profiles/accounts",
+    "method": "POST",
+    "class": "ProfilesController",
+    "action": "createAccount",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateAccountDto",
+        "validate": true,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "profiles",
+    "method": "POST",
+    "class": "ProfilesController",
+    "action": "create",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateProfileDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "profiles",
+    "method": "GET",
+    "class": "ProfilesController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "profiles/[id]",
+    "method": "GET",
+    "class": "ProfilesController",
+    "action": "findOne",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "profiles/[id]",
+    "method": "PATCH",
+    "class": "ProfilesController",
+    "action": "update",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "UpdateProfileDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "profiles/[id]",
+    "method": "DELETE",
+    "class": "ProfilesController",
+    "action": "remove",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "project-audit/[id]",
+    "method": "GET",
+    "class": "ProjectAuditController",
+    "action": "run",
+    "roles": [
+      "admin",
+      "controller"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "projectId",
+        "type": "string",
+        "validate": false,
+        "uuid": true,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "projectId": "id"
+    }
+  },
+  {
+    "route": "projects",
+    "method": "POST",
+    "class": "ProjectsController",
+    "action": "create",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "CreateProjectDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {}
+  },
+  {
+    "route": "projects",
+    "method": "GET",
+    "class": "ProjectsController",
+    "action": "findAll",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [],
+    "aliases": {}
+  },
+  {
+    "route": "projects/[id]",
+    "method": "GET",
+    "class": "ProjectsController",
+    "action": "findOne",
+    "roles": [
+      "admin",
+      "controller",
+      "technician"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "projects/[id]",
+    "method": "PATCH",
+    "class": "ProjectsController",
+    "action": "update",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      },
+      {
+        "kind": "Body",
+        "key": "",
+        "type": "UpdateProjectDto",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  },
+  {
+    "route": "projects/[id]",
+    "method": "DELETE",
+    "class": "ProjectsController",
+    "action": "remove",
+    "roles": [
+      "admin"
+    ],
+    "args": [
+      {
+        "kind": "Param",
+        "key": "id",
+        "type": "string",
+        "validate": false,
+        "uuid": false,
+        "integer": false
+      }
+    ],
+    "aliases": {
+      "id": "id"
+    }
+  }
+]
